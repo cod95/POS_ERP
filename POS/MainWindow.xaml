@@ -53,6 +53,7 @@
 
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel Margin="0,12">
+                        <TextBlock Text="الرئيسية" Foreground="#6F8499" FontSize="11" FontWeight="SemiBold" Margin="18,4,18,6"/>
                         <Button Style="{StaticResource NavButtonStyle}" Command="{Binding DashboardCommand}" Content="الرئيسية"/>
                         <Button Style="{StaticResource NavButtonStyle}" Command="{Binding POSCommand}" Content="نقطة البيع"/>
                         <Button Style="{StaticResource NavButtonStyle}" Command="{Binding SalesCommand}" Content="المبيعات"/>
@@ -60,10 +61,12 @@
                         <Button Style="{StaticResource NavButtonStyle}" Command="{Binding InventoryCommand}" Content="الأصناف والمخزون"/>
                         <Button Style="{StaticResource NavButtonStyle}" Command="{Binding MovingProductsCommand}" Content="تحويل المخزون"/>
                         <Separator Margin="16,10" Background="#34485D"/>
+                        <TextBlock Text="الحسابات" Foreground="#6F8499" FontSize="11" FontWeight="SemiBold" Margin="18,4,18,6"/>
                         <Button Style="{StaticResource NavButtonStyle}" Command="{Binding CustomersCommand}" Content="العملاء"/>
                         <Button Style="{StaticResource NavButtonStyle}" Command="{Binding SuppliersCommand}" Content="الموردون"/>
                         <Button Style="{StaticResource NavButtonStyle}" Command="{Binding QuotationsCommand}" Content="عروض الأسعار"/>
                         <Separator Margin="16,10" Background="#34485D"/>
+                        <TextBlock Text="الإدارة والإعدادات" Foreground="#6F8499" FontSize="11" FontWeight="SemiBold" Margin="18,4,18,6"/>
                         <Button Style="{StaticResource NavButtonStyle}" Command="{Binding UsersCommand}" Content="المستخدمون"/>
                         <Button Style="{StaticResource NavButtonStyle}" Command="{Binding RolesCommand}" Content="الصلاحيات"/>
                         <Button Style="{StaticResource NavButtonStyle}" Command="{Binding CompanyCommand}" Content="الإعدادات وبيانات الشركة"/>
