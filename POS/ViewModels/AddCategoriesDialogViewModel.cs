@@ -304,7 +304,7 @@ namespace POS.Dialogs.ViewModels
             try
             {
                 uniqueFileName = $"{Guid.NewGuid()}.jpeg";
-                string directoryPath = Path.Combine(Environment.CurrentDirectory, "images", "categories");
+                string directoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "POS", "images", "categories");
                 string destinationImagePath = Path.Combine(directoryPath, uniqueFileName);
 
                 // Create the directory if it does not exist
