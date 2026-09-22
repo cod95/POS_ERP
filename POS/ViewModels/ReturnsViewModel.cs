@@ -45,6 +45,7 @@ namespace POS.ViewModels
 
         public ObservableCollection<Warehouse> Warehouses { get; } = new();
         public ObservableCollection<ReturnLineRow> Lines { get; } = new();
+        public IReadOnlyList<string> ReturnTypeOptions { get; } = new[] { "مبيعات", "مشتريات" };
 
         public string SourceNumber
         {
