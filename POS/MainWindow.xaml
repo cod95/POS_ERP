@@ -72,6 +72,7 @@
                         <Button Style="{StaticResource NavButtonStyle}" Command="{Binding CompanyCommand}" Content="الإعدادات وبيانات الشركة"/>
                         <Button Style="{StaticResource NavButtonStyle}" Command="{Binding CurrencyRatesCommand}" Content="العملات وأسعار الصرف"/>
                         <Button Style="{StaticResource NavButtonStyle}" Command="{Binding AccountStatementsCommand}" Content="حسابات العملاء والموردين"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Command="{Binding ReturnsCommand}" Content="المرتجعات"/>
                         <Button Style="{StaticResource NavButtonStyle}" Command="{Binding ManufacturingCommand}" Content="التصنيع"/>
                     </StackPanel>
                 </ScrollViewer>
