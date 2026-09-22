@@ -98,6 +98,16 @@ namespace POS.ViewModels
         public ICommand DeliveryCommand { get; }
         public ICommand SuspendBillCommand { get; }
         public ICommand CancelBillCommand { get; }
+        private POS.Domain.Models.Payments.PaymentType MapPaymentType(string paymentMethod)
+        {
+            return paymentMethod switch
+            {
+                "كارت" => POS.Domain.Models.Payments.PaymentType.CreditCard,
+                "على الحساب" => POS.Domain.Models.Payments.PaymentType.OnAccount,
+                _ => POS.Domain.Models.Payments.PaymentType.Cash
+            };
+        }
+
         public PurchaseProductsViewModel() : base()
         {
             CartItemsList = new ObservableCollection<PurchaseProduct>();
@@ -110,16 +120,6 @@ namespace POS.ViewModels
             DeliveryCommand = new RelayCommand(ExecuteDelivery);
             SuspendBillCommand = new RelayCommand(ExecuteSuspendBillCommand);
             CancelBillCommand = new RelayCommand(ExecuteCancelBill);
-        private POS.Domain.Models.Payments.PaymentType MapPaymentType(string paymentMethod)
-        {
-            return paymentMethod switch
-            {
-                "كارت" => POS.Domain.Models.Payments.PaymentType.CreditCard,
-                "على الحساب" => POS.Domain.Models.Payments.PaymentType.OnAccount,
-                _ => POS.Domain.Models.Payments.PaymentType.Cash
-            };
-        }
-
         #region CartListEvents
             CartList_CurrentCellChangedCommand = new RelayCommand(ExecuteCartList_CurrentCellChangedCommand);
             CartList_SelectionChangedCommand = new RelayCommand(ExecuteCartList_SelectionChangedCommand);
