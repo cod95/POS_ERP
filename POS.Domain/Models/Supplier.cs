@@ -112,8 +112,8 @@
                 }
             }
         }
-        private double _previousBalance;
-        public double PreviousBalance
+        private decimal _previousBalance;
+        public decimal PreviousBalance
         {
             get => _previousBalance;
             set
