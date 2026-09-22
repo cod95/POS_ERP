@@ -95,7 +95,17 @@
 
             <Border Grid.Row="1" Margin="14" Background="White" CornerRadius="8" BorderBrush="#DDE2E7" BorderThickness="1">
                 <Grid>
-                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed">
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CurrentView}" Value="{x:Null}">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
                         <TextBlock Text="{Binding StoreName}" FontSize="32" FontWeight="Bold" HorizontalAlignment="Center" Foreground="#263544"/>
                         <TextBlock Text="اختر إحدى الوظائف من القائمة لبدء العمل" FontSize="16" Foreground="#6B7785" Margin="0,12,0,0" HorizontalAlignment="Center"/>
                     </StackPanel>
