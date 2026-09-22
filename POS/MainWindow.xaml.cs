@@ -1,4 +1,4 @@
-﻿using POS.ViewModels;
+using POS.ViewModels;
 using System.Windows;
 
 namespace POS
@@ -15,6 +15,11 @@ namespace POS
             InitializeComponent();
             viewModel = new MainViewModel();
             DataContext = viewModel;
+        }
+
+        private void MinimizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
