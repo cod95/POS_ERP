@@ -19,6 +19,21 @@ namespace POS.Persistence.Migrations
             migrationBuilder.AddColumn<int>("Currency", "PurchasePayments", type: "INTEGER", nullable: false, defaultValue: 0);
             migrationBuilder.AddColumn<decimal>("ExchangeRate", "PurchasePayments", type: "decimal(18, 6)", nullable: false, defaultValue: 1m);
 
+            migrationBuilder.Sql(@"
+                UPDATE SaleProducts
+                SET CostPrice = COALESCE(
+                    (
+                        SELECT pp.PurchasePrice
+                        FROM PurchaseProducts pp
+                        JOIN Purchases p ON p.Id = pp.PurchaseId
+                        WHERE pp.ProductId = SaleProducts.ProductId
+                          AND (pp.WarehouseId = SaleProducts.WarehouseId OR (pp.WarehouseId IS NULL AND SaleProducts.WarehouseId IS NULL))
+                          AND p.Date <= SaleProducts.Date
+                        ORDER BY p.Date DESC, pp.Id DESC
+                        LIMIT 1
+                    ), 0);
+            ");
+
             migrationBuilder.CreateTable(
                 name: "CurrencyRates",
                 columns: table => new
