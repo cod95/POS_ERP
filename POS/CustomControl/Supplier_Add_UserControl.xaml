@@ -109,8 +109,11 @@
             </Grid.RowDefinitions>
 
             <!-- Header -->
-            <Border Grid.Row="0" Background="#007ACC">
-
+            <Border Grid.Row="0" Background="#007ACC" Padding="18,10">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="إضافة مورد" Foreground="White" FontSize="22" FontWeight="SemiBold"/>
+                    <TextBlock Text="  |  بيانات المورد والحساب" Foreground="#DCEBFF" FontSize="13" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                </StackPanel>
             </Border>
 
             <!-- Content -->
