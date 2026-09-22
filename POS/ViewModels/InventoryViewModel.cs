@@ -1618,6 +1618,28 @@ namespace POS.ViewModels
                 // Mark the entity as modified
                 _dbContext.Entry(SelectedProduct).State = EntityState.Modified;
 
+                // Quantity is ledger-derived. Adjust only the difference from the current warehouse balance.
+                if (SelectedWarehouse != null)
+                {
+                    var currentQuantity = SelectedProduct.Quantity(SelectedWarehouse.Id);
+                    var quantityDelta = Quantity - currentQuantity;
+                    if (quantityDelta != 0)
+                    {
+                        var unitCost = SelectedProduct.GetLastPurchasePrice(SelectedWarehouse.Id) ?? 0;
+                        _dbContext.StockMovements.Add(new StockMovement
+                        {
+                            ProductId = SelectedProduct.Id,
+                            WarehouseId = SelectedWarehouse.Id,
+                            Quantity = quantityDelta,
+                            UnitCost = unitCost,
+                            MovementType = quantityDelta > 0 ? StockMovementType.AdjustmentIn : StockMovementType.AdjustmentOut,
+                            Date = DateTime.Now,
+                            Reference = $"ADJ-{DateTime.Now:yyyyMMddHHmmssfff}",
+                            Notes = "تعديل كمية المخزون من شاشة الأصناف"
+                        });
+                    }
+                }
+
                 // Save changes to database
                 _dbContext.SaveChanges();
 
@@ -1629,6 +1651,23 @@ namespace POS.ViewModels
                 newProduct.ImagePath = imagePath; // Set ImagePath with new path
                 _dbContext.Products.Add(newProduct);
                 _dbContext.SaveChanges();
+
+                // Quantity is ledger-derived. Record the initial quantity as an adjustment.
+                if (Quantity != 0 && SelectedWarehouse != null)
+                {
+                    _dbContext.StockMovements.Add(new StockMovement
+                    {
+                        ProductId = newProduct.Id,
+                        WarehouseId = SelectedWarehouse.Id,
+                        Quantity = Quantity,
+                        UnitCost = 0,
+                        MovementType = Quantity > 0 ? StockMovementType.AdjustmentIn : StockMovementType.AdjustmentOut,
+                        Date = DateTime.Now,
+                        Reference = $"ADJ-{DateTime.Now:yyyyMMddHHmmssfff}",
+                        Notes = "الرصيد الافتتاحي للمنتج"
+                    });
+                    _dbContext.SaveChanges();
+                }
 
                 return newProduct;
             }
