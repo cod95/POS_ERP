@@ -110,7 +110,7 @@ namespace POS.ViewModels
             DeliveryCommand = new RelayCommand(ExecuteDelivery);
             SuspendBillCommand = new RelayCommand(ExecuteSuspendBillCommand);
             CancelBillCommand = new RelayCommand(ExecuteCancelBill);
-            private POS.Domain.Models.Payments.PaymentType MapPaymentType(string paymentMethod)
+        private POS.Domain.Models.Payments.PaymentType MapPaymentType(string paymentMethod)
         {
             return paymentMethod switch
             {
