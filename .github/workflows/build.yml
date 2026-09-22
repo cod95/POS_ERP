@@ -1,5 +1,8 @@
 name: Build POS ERP
 
+permissions:
+  contents: write
+
 on:
   push:
     branches:
@@ -27,6 +30,19 @@ jobs:
 
       - name: Build
         run: dotnet build POS.sln --configuration Release --no-restore
+
+      - name: Sync EF model snapshot
+        if: github.event_name == 'push' && github.ref == 'refs/heads/erp-core-phase1' && !contains(github.event.head_commit.message, 'Sync EF model snapshot')
+        shell: pwsh
+        run: |
+          dotnet tool install --global dotnet-ef --version 8.0.1
+          dotnet ef migrations add SnapshotSync --project POS.Persistence/POS.Persistence.csproj --startup-project POS/POS.csproj --output-dir Migrations
+          Get-ChildItem POS.Persistence/Migrations/*_SnapshotSync.cs,POS.Persistence/Migrations/*_SnapshotSync.Designer.cs | Remove-Item -Force
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add POS.Persistence/Migrations/AppDbContextModelSnapshot.cs
+          git commit -m "Sync EF model snapshot"
+          git push
 
       - name: Publish POS
         run: dotnet publish POS/POS.csproj --configuration Release --no-restore --output ./publish
