@@ -330,19 +330,22 @@ namespace POS.Domain.Models.Products
                 }
             }
         }
-        public double? GetLastPurchasePrice()
+        public double? GetLastPurchasePrice(int? warehouseId = null)
         {
-            // Ensure PurchaseProducts is not null
             if (PurchaseProducts != null && PurchaseProducts.Any())
             {
-                // Sort purchase products by purchase date descending
-                var sortedPurchases = PurchaseProducts.OrderByDescending(p => p.Purchase?.Date);
+                var query = PurchaseProducts.AsEnumerable();
 
-                // Return the purchase price of the first purchase (latest date)
-                return sortedPurchases.FirstOrDefault()?.PurchasePrice;
+                if (warehouseId.HasValue)
+                    query = query.Where(p => p.WarehouseId == warehouseId.Value);
+
+                return query
+                    .OrderByDescending(p => p.Purchase?.Date ?? p.Date)
+                    .ThenByDescending(p => p.Id)
+                    .Select(p => (double?)p.PurchasePrice)
+                    .FirstOrDefault() ?? 0;
             }
 
-            // If PurchaseProducts is null or empty, return null
             return 0;
         }
 
