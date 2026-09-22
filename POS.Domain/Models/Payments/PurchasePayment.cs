@@ -41,6 +41,35 @@ namespace POS.Domain.Models.Payments
             }
         }
 
+        private Currency _currency = Currency.USD;
+        public Currency Currency
+        {
+            get => _currency;
+            set
+            {
+                if (_currency != value)
+                {
+                    _currency = value;
+                    NotifyPropertyChanged(nameof(Currency));
+                }
+            }
+        }
+
+        private decimal _exchangeRate = 1m;
+        [Column(TypeName = "decimal(18, 6)")]
+        public decimal ExchangeRate
+        {
+            get => _exchangeRate;
+            set
+            {
+                if (_exchangeRate != value)
+                {
+                    _exchangeRate = value;
+                    NotifyPropertyChanged(nameof(ExchangeRate));
+                }
+            }
+        }
+
         private PaymentType _paymentType;
         public PaymentType PaymentType
         {
