@@ -41,6 +41,7 @@ namespace POS.ViewModels
         private Warehouse _selectedWarehouse;
         private string _reason;
         private bool _isSalesReturn = true;
+        private string _selectedReturnType = "مبيعات";
 
         public ObservableCollection<Warehouse> Warehouses { get; } = new();
         public ObservableCollection<ReturnLineRow> Lines { get; } = new();
@@ -66,7 +67,21 @@ namespace POS.ViewModels
         public bool IsSalesReturn
         {
             get => _isSalesReturn;
-            set { if (_isSalesReturn != value) { _isSalesReturn = value; OnPropertyChanged(nameof(IsSalesReturn)); } }
+            private set { if (_isSalesReturn != value) { _isSalesReturn = value; OnPropertyChanged(nameof(IsSalesReturn)); } }
+        }
+
+        public string SelectedReturnType
+        {
+            get => _selectedReturnType;
+            set
+            {
+                if (_selectedReturnType != value)
+                {
+                    _selectedReturnType = value;
+                    IsSalesReturn = value == "مبيعات";
+                    OnPropertyChanged(nameof(SelectedReturnType));
+                }
+            }
         }
 
         public ICommand LoadDocumentCommand { get; }
