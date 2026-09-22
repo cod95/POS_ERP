@@ -86,7 +86,7 @@ namespace POS.ViewModels
             decimal balance = 0m;
             foreach (var invoice in invoices)
             {
-                balance += invoice.TotalPrice;
+                balance += ToBaseCurrency(invoice.TotalPrice, invoice.Currency, invoice.ExchangeRate);
                 CustomerRows.Add(new AccountStatementRow
                 {
                     Date = invoice.Date,
@@ -100,7 +100,7 @@ namespace POS.ViewModels
 
                 foreach (var payment in invoice.InvoicePayments ?? Enumerable.Empty<POS.Domain.Models.Payments.InvoicePayment>())
                 {
-                    balance -= payment.Amount;
+                    balance -= ToBaseCurrency(payment.Amount, payment.Currency, payment.ExchangeRate);
                     CustomerRows.Add(new AccountStatementRow
                     {
                         Date = payment.Date,
@@ -133,7 +133,7 @@ namespace POS.ViewModels
             decimal balance = 0m;
             foreach (var purchase in purchases)
             {
-                balance += purchase.TotalPrice;
+                balance += ToBaseCurrency(purchase.TotalPrice, purchase.Currency, purchase.ExchangeRate);
                 SupplierRows.Add(new AccountStatementRow
                 {
                     Date = purchase.Date,
@@ -147,7 +147,7 @@ namespace POS.ViewModels
 
                 foreach (var payment in purchase.PurchasePayments ?? Enumerable.Empty<POS.Domain.Models.Payments.PurchasePayment>())
                 {
-                    balance -= payment.Amount;
+                    balance -= ToBaseCurrency(payment.Amount, payment.Currency, payment.ExchangeRate);
                     SupplierRows.Add(new AccountStatementRow
                     {
                         Date = payment.Date,
@@ -162,6 +162,13 @@ namespace POS.ViewModels
             }
 
             OnPropertyChanged(nameof(SupplierBalance));
+        }
+
+        private static decimal ToBaseCurrency(decimal amount, Currency currency, decimal rate)
+        {
+            if (currency == Currency.LBP && rate > 0m)
+                return amount / rate;
+            return amount;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
