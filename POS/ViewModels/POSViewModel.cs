@@ -236,7 +236,7 @@ namespace POS.ViewModels
                         Product = SelectedProduct,
                         Quantity = Quantity,
                         SalePrice = SalePrice,
-                        CostPrice = Convert.ToDouble(SelectedProduct.GetLastPurchasePrice() ?? 0),
+                        CostPrice = Convert.ToDouble(SelectedProduct.GetLastPurchasePrice(SelectedWarehouse?.Id) ?? 0),
                         CreatedDate = DateTime.Now,
                         Warehouse = SelectedWarehouse,
                         //Earned = (double)(SalePrice - (SelectedProduct.GetLastPurchasePrice() * Quantity)),
