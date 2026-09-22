@@ -36,6 +36,7 @@ namespace POS.Persistence.Context
         public DbSet<Purchase> Purchases { get; set; }
         public DbSet<PurchasePayment> PurchasePayments { get; set; }
         public DbSet<PurchaseProduct> PurchaseProducts { get; set; }
+        public DbSet<StockMovement> StockMovements { get; set; }
 
         public DbSet<Area> Areas { get; set; }
         public DbSet<Shipping> Shippings { get; set; }
