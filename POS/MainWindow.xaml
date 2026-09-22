@@ -93,7 +93,19 @@
                 </Grid>
             </Border>
 
-            <Border Grid.Row="1" Margin="14" Background="White" CornerRadius="8" BorderBrush="#DDE2E7" BorderThickness="1">
+            <Border Grid.Row="1" Background="#F8FAFC" BorderBrush="#DDE2E7" BorderThickness="0,0,0,1">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="12,0">
+                    <Button Style="{StaticResource NavButtonStyle}" Width="110" Height="30" Padding="8,4" Margin="3" Command="{Binding POSCommand}" Content="نقطة البيع"/>
+                    <Button Style="{StaticResource NavButtonStyle}" Width="100" Height="30" Padding="8,4" Margin="3" Command="{Binding SalesCommand}" Content="المبيعات"/>
+                    <Button Style="{StaticResource NavButtonStyle}" Width="100" Height="30" Padding="8,4" Margin="3" Command="{Binding PurchaseCommand}" Content="المشتريات"/>
+                    <Button Style="{StaticResource NavButtonStyle}" Width="120" Height="30" Padding="8,4" Margin="3" Command="{Binding InventoryCommand}" Content="المخزون"/>
+                    <Button Style="{StaticResource NavButtonStyle}" Width="110" Height="30" Padding="8,4" Margin="3" Command="{Binding CustomersCommand}" Content="العملاء"/>
+                    <Button Style="{StaticResource NavButtonStyle}" Width="110" Height="30" Padding="8,4" Margin="3" Command="{Binding SuppliersCommand}" Content="الموردون"/>
+                    <Button Style="{StaticResource NavButtonStyle}" Width="90" Height="30" Padding="8,4" Margin="3" Command="{Binding DashboardCommand}" Content="الرئيسية"/>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Row="2" Margin="14" Background="White" CornerRadius="8" BorderBrush="#DDE2E7" BorderThickness="1">
                 <Grid>
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed">
                         <StackPanel.Style>
