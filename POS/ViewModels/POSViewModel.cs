@@ -112,7 +112,7 @@ namespace POS.ViewModels
             TotalQuantity = CartItemsList.Sum(item => item.Quantity);
             SubTotal = CartItemsList.Sum(item => item.SalePrice * item.Quantity);
             TotalAmount = SubTotal + ((Tax / 100) * SubTotal) - Discount;
-            // Earnings = (double)(TotalAmount - CartItemsList.Sum(item => item.Product.GetLastPurchasePrice() * item.Quantity));
+            Earnings = CartItemsList.Sum(item => (item.SalePrice - item.CostPrice) * item.Quantity);
         }
         public void SetSelectedItemValues(SaleProduct selectedCartItem)
         {
