@@ -171,6 +171,13 @@ namespace POS.ViewModels
             return amount;
         }
 
+        private static decimal ToBaseCurrency(decimal amount, Currency currency, decimal rate)
+        {
+            if (currency == Currency.LBP && rate > 0m)
+                return amount / rate;
+            return amount;
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string name) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
