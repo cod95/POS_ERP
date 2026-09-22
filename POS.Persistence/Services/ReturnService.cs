@@ -188,7 +188,7 @@ public sealed class ReturnService
                 ProductId = line.ProductId,
                 WarehouseId = warehouseId,
                 Quantity = -line.Quantity,
-                UnitCost = line.UnitCost,
+                UnitCost = (double)line.UnitCost,
                 MovementType = StockMovementType.PurchaseReturn,
                 Date = document.Date,
                 Reference = document.Number,
