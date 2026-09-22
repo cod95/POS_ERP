@@ -4,6 +4,7 @@ using POS.Domain.Models;
 using POS.Domain.Models.Payments;
 using POS.Domain.Models.Payments.PaymentMethods;
 using POS.Domain.Models.Products;
+using POS.Domain.Models.Returns;
 using POS.Persistence.Configurations;
 using POS.Persistence.Models;
 
@@ -38,6 +39,8 @@ namespace POS.Persistence.Context
         public DbSet<PurchaseProduct> PurchaseProducts { get; set; }
         public DbSet<StockMovement> StockMovements { get; set; }
         public DbSet<CurrencyRate> CurrencyRates { get; set; }
+        public DbSet<ReturnDocument> ReturnDocuments { get; set; }
+        public DbSet<ReturnDocumentLine> ReturnDocumentLines { get; set; }
 
         public DbSet<Area> Areas { get; set; }
         public DbSet<Shipping> Shippings { get; set; }
