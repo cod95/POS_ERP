@@ -34,7 +34,11 @@
             </Style>
         </Grid.Resources>
         <Grid Grid.Column="0" Background="#F6F6F8">
-            <StackPanel Margin="10">
+            <StackPanel Margin="14">
+                <StackPanel Margin="4,4,4,10">
+                    <TextBlock Text="لوحة التحكم" FontSize="26" FontWeight="SemiBold" Foreground="#20252B"/>
+                    <TextBlock Text="ملخص سريع للمبيعات والأداء وحركة النشاط" FontSize="13" Foreground="Gray" Margin="0,3,0,0"/>
+                </StackPanel>
                 <Grid Height="60">
 
 
