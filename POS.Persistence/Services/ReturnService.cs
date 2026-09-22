@@ -60,7 +60,7 @@ public sealed class ReturnService
             var unitPrice = Convert.ToDecimal(saleLine.SalePrice);
             lines.Add(new ReturnDocumentLine
             {
-                ProductId = saleLine.ProductId,
+                ProductId = saleLine.ProductId ?? throw new InvalidOperationException("Sale line has no product."),
                 WarehouseId = warehouseId,
                 SourceSaleProductId = saleLine.Id,
                 Quantity = requested.Value,
@@ -96,7 +96,7 @@ public sealed class ReturnService
                 ProductId = line.ProductId,
                 WarehouseId = warehouseId,
                 Quantity = line.Quantity,
-                UnitCost = line.UnitCost,
+                UnitCost = (double)line.UnitCost,
                 MovementType = StockMovementType.SaleReturn,
                 Date = document.Date,
                 Reference = document.Number,
