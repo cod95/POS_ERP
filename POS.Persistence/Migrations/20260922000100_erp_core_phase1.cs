@@ -48,6 +48,18 @@ namespace POS.Persistence.Migrations
                     table.ForeignKey("FK_StockMovements_Purchases_PurchaseId", x => x.PurchaseId, "Purchases", "Id", onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.Sql(@"
+                INSERT INTO StockMovements
+                    (ProductId, WarehouseId, Quantity, UnitCost, MovementType, Date, InvoiceId, PurchaseId, Reference, Notes, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
+                SELECT ProductId, WarehouseId, Quantity, PurchasePrice, 0, Date, NULL, PurchaseId, NULL, 'Backfilled from existing purchase lines', NULL, NULL, NULL, NULL
+                FROM PurchaseProducts;
+
+                INSERT INTO StockMovements
+                    (ProductId, WarehouseId, Quantity, UnitCost, MovementType, Date, InvoiceId, PurchaseId, Reference, Notes, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
+                SELECT ProductId, WarehouseId, -Quantity, 0, 1, Date, InvoiceId, NULL, NULL, 'Backfilled from existing sale lines', NULL, NULL, NULL, NULL
+                FROM SaleProducts;
+            ");
+
             migrationBuilder.CreateIndex("IX_StockMovements_ProductId", "StockMovements", "ProductId");
             migrationBuilder.CreateIndex("IX_StockMovements_WarehouseId", "StockMovements", "WarehouseId");
             migrationBuilder.CreateIndex("IX_StockMovements_InvoiceId", "StockMovements", "InvoiceId");
