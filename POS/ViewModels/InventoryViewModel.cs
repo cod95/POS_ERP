@@ -1087,7 +1087,7 @@ namespace POS.ViewModels
         #endregion
         private void SearchByBarcode()
         {
-            IQueryable<Product> query = _dbContext.Products.Include(p => p.SaleProducts).Include(p => p.PurchaseProducts).Include(p => p.Category);
+            IQueryable<Product> query = _dbContext.Products.Include(p => p.StockMovements).Include(p => p.SaleProducts).Include(p => p.PurchaseProducts).Include(p => p.Category);
 
             if (!string.IsNullOrEmpty(BarcodeSearchText))
             {
