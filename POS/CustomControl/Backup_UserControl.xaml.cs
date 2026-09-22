@@ -10,7 +10,11 @@ namespace POS.CustomControl
     /// </summary>
     public partial class Backup_UserControl : UserControl
     {
-        private readonly string _dbFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "database", "pos.db");
+        private readonly string _dbFilePath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "POS",
+            "database",
+            "pos.db");
 
         public Backup_UserControl()
         {
