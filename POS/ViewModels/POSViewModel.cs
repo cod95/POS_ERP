@@ -335,6 +335,7 @@ namespace POS.ViewModels
                     ProductId = cartItem.ProductId,
                     Quantity = cartItem.Quantity,
                     SalePrice = cartItem.SalePrice,
+                    CostPrice = cartItem.CostPrice,
                     WarehouseId = SelectedWarehouse?.Id,
                     Warehouse = SelectedWarehouse,
                     Date = PurchaseDate,
@@ -343,6 +344,17 @@ namespace POS.ViewModels
                 };
                 saleProduct.InvoiceId = newInvoice.Id;
                 _dbContext.SaleProducts.Add(saleProduct);
+                _dbContext.StockMovements.Add(new POS.Domain.Models.StockMovement
+                {
+                    ProductId = cartItem.ProductId.Value,
+                    WarehouseId = SelectedWarehouse?.Id,
+                    Quantity = -cartItem.Quantity,
+                    UnitCost = cartItem.CostPrice,
+                    MovementType = POS.Domain.Models.StockMovementType.Sale,
+                    Date = PurchaseDate,
+                    InvoiceId = newInvoice.Id,
+                    Reference = newInvoice.Number
+                });
             }
 
             // Save changes to persist the SaleProduct entities associated with the Invoice
@@ -353,7 +365,9 @@ namespace POS.ViewModels
                 InvoiceId = newInvoice.Id,
                 Amount = paymentAmount,
                 Date = PaymentDate,
-                PaymentType = MapPaymentType(paymentMethod)
+                PaymentType = MapPaymentType(paymentMethod),
+                Currency = newInvoice.Currency,
+                ExchangeRate = newInvoice.ExchangeRate
             });
 
             _dbContext.SaveChanges();
