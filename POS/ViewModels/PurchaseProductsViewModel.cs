@@ -308,6 +308,17 @@ namespace POS.ViewModels
                 };
                 PurchaseProduct.PurchaseId = newInvoice.Id;
                 _dbContext.PurchaseProducts.Add(PurchaseProduct);
+                _dbContext.StockMovements.Add(new POS.Domain.Models.StockMovement
+                {
+                    ProductId = cartItem.ProductId,
+                    WarehouseId = SelectedWarehouse?.Id,
+                    Quantity = cartItem.Quantity,
+                    UnitCost = cartItem.PurchasePrice,
+                    MovementType = POS.Domain.Models.StockMovementType.Purchase,
+                    Date = PurchaseDate,
+                    PurchaseId = newInvoice.Id,
+                    Reference = newInvoice.Number
+                });
             }
 
             // Save changes to persist the PurchaseProduct entities associated with the Invoice
@@ -318,7 +329,9 @@ namespace POS.ViewModels
                 PurchaseId = newInvoice.Id,
                 Amount = paymentAmount,
                 Date = PaymentDate,
-                PaymentType = MapPaymentType(paymentMethod)
+                PaymentType = MapPaymentType(paymentMethod),
+                Currency = newInvoice.Currency,
+                ExchangeRate = newInvoice.ExchangeRate
             });
 
             _dbContext.SaveChanges();
