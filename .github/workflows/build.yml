@@ -45,9 +45,11 @@ jobs:
           git push
 
       - name: Publish POS
+        if: github.event_name != 'pull_request'
         run: dotnet publish POS/POS.csproj --configuration Release --no-restore --output ./publish
 
       - name: Upload POS build
+        if: github.event_name != 'pull_request'
         uses: actions/upload-artifact@v4
         with:
           name: POS-ERP-Release
