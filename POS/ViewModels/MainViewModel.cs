@@ -41,6 +41,7 @@ namespace POS.ViewModels
         public ICommand UsersCommand { get; }
         public ICommand RolesCommand { get; }
         public ICommand CompanyCommand { get; }
+        public ICommand CurrencyRatesCommand { get; }
         public ICommand ManufacturingCommand { get; }
 
         public MainViewModel()
@@ -57,6 +58,7 @@ namespace POS.ViewModels
             UsersCommand = new RelayCommand(_ => Show("المستخدمون", new Users_UserControl()));
             RolesCommand = new RelayCommand(_ => Show("الصلاحيات", new Roles_UserControl()));
             CompanyCommand = new RelayCommand(_ => Show("بيانات الشركة والإعدادات", new CompanyInfo_UserControl()));
+            CurrencyRatesCommand = new RelayCommand(_ => Show("العملات وأسعار الصرف", new CurrencyRates_UserControl()));
             ManufacturingCommand = new RelayCommand(_ => Show("التصنيع", new Manufacturing_UserControl()));
 
             ShowDashboard();
