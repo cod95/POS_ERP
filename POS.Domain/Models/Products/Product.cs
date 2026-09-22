@@ -272,25 +272,23 @@ namespace POS.Domain.Models.Products
 
         // One-to-many relationship with PurchaseProduct
         public ICollection<PurchaseProduct>? PurchaseProducts { get; set; }
+        public ICollection<StockMovement>? StockMovements { get; set; }
 
         public ProductType ProductType { get; set; }
-        // Calculated quantity based on sales and purchases
+        // Current stock is calculated from the immutable stock movement ledger.
         public double Quantity(int? warehouseId = null)
         {
             if (ProductType == ProductType.Service)
                 return 0;
 
-            // Filter purchase and sale quantities based on the warehouse if provided
-            var purchaseQuantity = PurchaseProducts
-                .Where(p => warehouseId == null || p.WarehouseId == warehouseId)
-                .Sum(p => p.Quantity);
+            if (StockMovements == null)
+                return 0;
 
-            var saleQuantity = SaleProducts
-                .Where(s => warehouseId == null || s.WarehouseId == warehouseId)
-                .Sum(s => s.Quantity);
-
-            return purchaseQuantity - saleQuantity;
+            return StockMovements
+                .Where(m => warehouseId == null || m.WarehouseId == warehouseId)
+                .Sum(m => m.Quantity);
         }
+
         private double? _minSalePrice;
         public double? MinSalePrice
         {
