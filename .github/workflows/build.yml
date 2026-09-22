@@ -32,7 +32,7 @@ jobs:
         run: dotnet build POS.sln --configuration Release --no-restore
 
       - name: Sync EF model snapshot
-        if: github.event_name == 'push' && github.ref == 'refs/heads/erp-core-phase1' && !contains(github.event.head_commit.message, 'Sync EF model snapshot')
+        if: github.event_name == 'push' && github.ref == 'refs/heads/erp-core-phase1' && !contains(github.event.head_commit.message, '[auto-snapshot]')
         shell: pwsh
         run: |
           dotnet tool install --global dotnet-ef --version 8.0.1
@@ -41,7 +41,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add POS.Persistence/Migrations/AppDbContextModelSnapshot.cs
-          git commit -m "Sync EF model snapshot"
+          git commit -m "Sync EF model snapshot [auto-snapshot]"
           git push
 
       - name: Publish POS
