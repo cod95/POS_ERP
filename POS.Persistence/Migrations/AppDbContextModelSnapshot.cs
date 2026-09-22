@@ -1597,7 +1597,7 @@ namespace POS.Persistence.Migrations
                         {
                             Id = "8e445865-a24d-4543-a6c6-9443d048cdb9",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "daaa279a-680f-46cc-a0d7-f521be74a942",
+                            ConcurrencyStamp = "d23696d8-53f3-4ffe-b4d6-c601d36fe965",
                             DefaultRole = "Administrator",
                             Email = "admin@arp.com",
                             EmailConfirmed = true,
@@ -1606,9 +1606,9 @@ namespace POS.Persistence.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ARP.COM",
                             NormalizedUserName = "ADMIN@ARP.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAECKaMst2ZF1xAiQztS/JEVk2oQGFQSKZAvd2p7H6jyqL9uFxjHremQ0Zdq5f0AvFtA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAENig7JwRW6RIsESOAPqG4Wiivi/0QLtM+wTC15lDx6aR7HbE2MvQSXT+RItzX96YzA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "0d26a8b0-eb12-4153-ad2a-04637aa55c8e",
+                            SecurityStamp = "71119aa9-e521-4243-aac2-52e2de3bce6a",
                             TwoFactorEnabled = false,
                             UserName = "admin@arp.com"
                         },
@@ -1616,7 +1616,7 @@ namespace POS.Persistence.Migrations
                         {
                             Id = "9e224968-33e4-4652-b7b7-8574d048cdb9",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "ad108b17-8a37-403c-9b2c-d09fa2a17742",
+                            ConcurrencyStamp = "f30480a2-4363-451a-9501-d15ceb8d6eb6",
                             Email = "user@arp.com",
                             EmailConfirmed = true,
                             FirstName = "System",
@@ -1624,9 +1624,9 @@ namespace POS.Persistence.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "USER@ARP.COM",
                             NormalizedUserName = "USER@ARP.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEKNBqdbb7JOYANguyebJv7zUR3Sd662zUMYgE0KPTu7+3B1DSVWAyTP+gVZzZAMFwA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEPY1kNx5Rfgcp/El7XrosAgLCUtP8zENXnxBbu+UlvTYxbu0IUn7cKAZZFyTncSw6A==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "a241afa5-0de3-4ea3-8d37-abaaa6bbb178",
+                            SecurityStamp = "4aa2a596-8c93-4335-b5a3-d21d0c8de18e",
                             TwoFactorEnabled = false,
                             UserName = "user@arp.com"
                         });
