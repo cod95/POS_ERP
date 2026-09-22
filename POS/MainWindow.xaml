@@ -70,6 +70,7 @@
                         <Button Style="{StaticResource NavButtonStyle}" Command="{Binding UsersCommand}" Content="المستخدمون"/>
                         <Button Style="{StaticResource NavButtonStyle}" Command="{Binding RolesCommand}" Content="الصلاحيات"/>
                         <Button Style="{StaticResource NavButtonStyle}" Command="{Binding CompanyCommand}" Content="الإعدادات وبيانات الشركة"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Command="{Binding CurrencyRatesCommand}" Content="العملات وأسعار الصرف"/>
                         <Button Style="{StaticResource NavButtonStyle}" Command="{Binding ManufacturingCommand}" Content="التصنيع"/>
                     </StackPanel>
                 </ScrollViewer>
