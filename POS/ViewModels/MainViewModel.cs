@@ -1,92 +1,77 @@
-﻿using POS.Views;
+using POS.CustomControl;
 using System.ComponentModel;
-using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace POS.ViewModels
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        private string _storeName;
+        private string _storeName = "ARP-POS";
+        private string _pageTitle = "لوحة التحكم";
+        private object _currentView;
+
         public string StoreName
         {
-            get { return _storeName; }
-            set
-            {
-                if (_storeName != value)
-                {
-                    _storeName = value;
-                    OnPropertyChanged(nameof(StoreName));
-                }
-            }
+            get => _storeName;
+            set { if (_storeName != value) { _storeName = value; OnPropertyChanged(nameof(StoreName)); } }
         }
 
-        public ICommand SettingsCommand { get; }
-        public ICommand PurchaseCommand { get; }
-        public ICommand CustomersCommand { get; }
-        public ICommand SellsCommand { get; }
-        public ICommand BankCommand { get; }
-        public ICommand InventoryCommand { get; }
+        public string PageTitle
+        {
+            get => _pageTitle;
+            set { if (_pageTitle != value) { _pageTitle = value; OnPropertyChanged(nameof(PageTitle)); } }
+        }
+
+        public object CurrentView
+        {
+            get => _currentView;
+            private set { _currentView = value; OnPropertyChanged(nameof(CurrentView)); }
+        }
+
+        public ICommand DashboardCommand { get; }
         public ICommand POSCommand { get; }
+        public ICommand SalesCommand { get; }
+        public ICommand PurchaseCommand { get; }
+        public ICommand InventoryCommand { get; }
+        public ICommand MovingProductsCommand { get; }
+        public ICommand CustomersCommand { get; }
+        public ICommand SuppliersCommand { get; }
+        public ICommand QuotationsCommand { get; }
+        public ICommand UsersCommand { get; }
+        public ICommand RolesCommand { get; }
+        public ICommand CompanyCommand { get; }
+        public ICommand ManufacturingCommand { get; }
 
         public MainViewModel()
         {
-            StoreName = "ARP-POS";
-            SettingsCommand = new RelayCommand(ExecuteSettingsCommand);
-            PurchaseCommand = new RelayCommand(ExecutePurchaseCommand);
-            CustomersCommand = new RelayCommand(ExecuteCustomersCommand);
-            SellsCommand = new RelayCommand(ExecuteSellsCommand);
-            BankCommand = new RelayCommand(ExecuteBankCommand);
-            InventoryCommand = new RelayCommand(ExecuteInventoryCommand);
-            POSCommand = new RelayCommand(ExecutePOSCommand);
+            DashboardCommand = new RelayCommand(_ => ShowDashboard());
+            POSCommand = new RelayCommand(_ => Show("نقطة البيع", new POS_UserControl()));
+            SalesCommand = new RelayCommand(_ => Show("المبيعات", new SalesHistory_UserControl()));
+            PurchaseCommand = new RelayCommand(_ => Show("المشتريات", new Purchase_Products_UserControl()));
+            InventoryCommand = new RelayCommand(_ => Show("الأصناف والمخزون", new Inventory_UserControl()));
+            MovingProductsCommand = new RelayCommand(_ => Show("تحويل المخزون", new Moving_Products_UserControl()));
+            CustomersCommand = new RelayCommand(_ => Show("العملاء", new Customer_Add_UserControl()));
+            SuppliersCommand = new RelayCommand(_ => Show("الموردون", new Supplier_Add_UserControl()));
+            QuotationsCommand = new RelayCommand(_ => Show("عروض الأسعار", new PriceQuotation_UserControl()));
+            UsersCommand = new RelayCommand(_ => Show("المستخدمون", new Users_UserControl()));
+            RolesCommand = new RelayCommand(_ => Show("الصلاحيات", new Roles_UserControl()));
+            CompanyCommand = new RelayCommand(_ => Show("بيانات الشركة والإعدادات", new CompanyInfo_UserControl()));
+            ManufacturingCommand = new RelayCommand(_ => Show("التصنيع", new Manufacturing_UserControl()));
+
+            ShowDashboard();
         }
 
-        private void ExecuteSettingsCommand(object parameter)
+        private void ShowDashboard()
         {
-            // Open Settings Window
-            OpenWindow(new SettingsWindow());
+            PageTitle = "لوحة التحكم";
+            CurrentView = null;
         }
 
-        private void ExecutePurchaseCommand(object parameter)
+        private void Show(string title, UserControl view)
         {
-            // Open Purchase Window
-            OpenWindow(new PurchaseWindow());
-        }
-
-        private void ExecuteCustomersCommand(object parameter)
-        {
-            // Open Customers Window
-            OpenWindow(new CustomersWindow());
-        }
-
-        private void ExecuteSellsCommand(object parameter)
-        {
-            // Open Sells Window
-            OpenWindow(new SellsWindow());
-        }
-
-        private void ExecuteBankCommand(object parameter)
-        {
-            // Open Bank Window
-            OpenWindow(new BankWindow());
-        }
-
-        private void ExecuteInventoryCommand(object parameter)
-        {
-            // Open Inventory Window
-            OpenWindow(new InventoryWindow());
-        }
-
-        private void ExecutePOSCommand(object parameter)
-        {
-            // Open POS Window
-            OpenWindow(new POSWindow());
-        }
-
-        private void OpenWindow(Window window)
-        {
-            window.Owner = App.Current.MainWindow;
-            window.Show();
+            PageTitle = title;
+            CurrentView = view;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -115,7 +100,6 @@ namespace POS.ViewModels
         }
 
         public bool CanExecute(object parameter) => _canExecute?.Invoke(parameter) ?? true;
-
         public void Execute(object parameter) => _execute(parameter);
     }
 }
