@@ -234,7 +234,11 @@ Command="{Binding AddCommand}">
                     </Grid.ColumnDefinitions>
 
                     <!-- TextBlock for Role Label -->
-                    <TextBlock Grid.Column="0" Text="الأدوار" FontSize="16" Style="{StaticResource CustomLabelStyle}"/>
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="إدارة الأدوار والصلاحيات" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource PrimaryTextColor}"/>
+                        <TextBlock Text="تعريف الأدوار وتحديد صلاحيات المستخدمين" FontSize="12" Foreground="Gray" Margin="0,4,0,10"/>
+                        <TextBlock Text="الأدوار" FontSize="16" Style="{StaticResource CustomLabelStyle}"/>
+                    </StackPanel>
 
                     <!-- ComboBox for Role Selection -->
                     <ComboBox Grid.Column="1" Width="300" ItemsSource="{Binding Roles}" SelectedItem="{Binding SelectedRole}" />
