@@ -782,6 +782,8 @@ namespace POS.ViewModels.Base
                    .ThenInclude(p => p.SaleProducts)
                .Include(c => c.Products)
                    .ThenInclude(p => p.PurchaseProducts)
+               .Include(c => c.Products)
+                   .ThenInclude(p => p.StockMovements)
                .Select(c => new
                {
                    Category = c,
