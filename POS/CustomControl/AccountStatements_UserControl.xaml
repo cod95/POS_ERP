@@ -30,7 +30,7 @@
                     </StackPanel>
                     <Border Grid.Row="1" Background="White" BorderBrush="#D9DEE5" BorderThickness="1" Padding="12" Margin="0,14,0,14">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="الرصيد الحالي:" FontWeight="SemiBold"/>
+                            <TextBlock Text="الرصيد الحالي (USD):" FontWeight="SemiBold"/>
                             <TextBlock Text="{Binding CustomerBalance, StringFormat=N2}" FontSize="18" FontWeight="Bold" Margin="10,0,0,0"/>
                         </StackPanel>
                     </Border>
@@ -61,7 +61,7 @@
                     </StackPanel>
                     <Border Grid.Row="1" Background="White" BorderBrush="#D9DEE5" BorderThickness="1" Padding="12" Margin="0,14,0,14">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="الرصيد الحالي:" FontWeight="SemiBold"/>
+                            <TextBlock Text="الرصيد الحالي (USD):" FontWeight="SemiBold"/>
                             <TextBlock Text="{Binding SupplierBalance, StringFormat=N2}" FontSize="18" FontWeight="Bold" Margin="10,0,0,0"/>
                         </StackPanel>
                     </Border>
