@@ -30,10 +30,7 @@
 
                 <StackPanel Grid.Column="0">
                     <TextBlock Text="نوع الإرجاع" FontWeight="SemiBold" Margin="0,0,0,6"/>
-                    <StackPanel Orientation="Horizontal">
-                        <RadioButton Content="مبيعات" IsChecked="{Binding IsSalesReturn}" Margin="0,0,14,0"/>
-                        <RadioButton Content="مشتريات" IsChecked="{Binding IsSalesReturn, Converter={StaticResource InverseBooleanConverter}}"/>
-                    </StackPanel>
+                    <ComboBox ItemsSource="{Binding ReturnTypeOptions}" SelectedItem="{Binding SelectedReturnType}" Height="36"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1">
