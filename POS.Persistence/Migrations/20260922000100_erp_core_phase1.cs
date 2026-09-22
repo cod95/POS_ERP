@@ -97,7 +97,7 @@ namespace POS.Persistence.Migrations
 
                 INSERT INTO StockMovements
                     (ProductId, WarehouseId, Quantity, UnitCost, MovementType, Date, InvoiceId, PurchaseId, Reference, Notes, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
-                SELECT ProductId, WarehouseId, -Quantity, 0, 1, Date, InvoiceId, NULL, NULL, 'Backfilled from existing sale lines', NULL, NULL, NULL, NULL
+                SELECT ProductId, WarehouseId, -Quantity, CostPrice, 1, Date, InvoiceId, NULL, NULL, 'Backfilled from existing sale lines', NULL, NULL, NULL, NULL
                 FROM SaleProducts;
             ");
 
