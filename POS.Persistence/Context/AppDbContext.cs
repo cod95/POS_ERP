@@ -61,6 +61,17 @@ namespace POS.Persistence.Context
                 Directory.CreateDirectory(dbDirectory);
             }
 
+            // Preserve an existing installation database when upgrading from the old
+            // application-directory location to the user-writable LocalAppData location.
+            string legacyDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "database");
+            string legacyDatabase = Path.Combine(legacyDirectory, "pos.db");
+            string currentDatabase = Path.Combine(dbDirectory, "pos.db");
+
+            if (!File.Exists(currentDatabase) && File.Exists(legacyDatabase))
+            {
+                File.Copy(legacyDatabase, currentDatabase, false);
+            }
+
             // Set up the SQLite connection
             optionsBuilder.UseSqlite($"Data Source={dbDirectory}\\pos.db");
         }
