@@ -1,0 +1,29 @@
+name: Build POS ERP
+
+on:
+  push:
+    branches:
+      - master
+      - erp-core-phase1
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore
+        run: dotnet restore POS.sln
+
+      - name: Build
+        run: dotnet build POS.sln --configuration Release --no-restore
