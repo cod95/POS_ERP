@@ -92,11 +92,16 @@ namespace POS.Persistence.Context
             }
             base.OnModelCreating(modelBuilder);
         }
-        public virtual async Task<int> SaveChangesAsync()
+        public override int SaveChanges()
         {
             OnBeforeSaveChanges();
-            var result = await base.SaveChangesAsync();
-            return result;
+            return base.SaveChanges();
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            OnBeforeSaveChanges();
+            return base.SaveChangesAsync(cancellationToken);
         }
 
         private void OnBeforeSaveChanges()
