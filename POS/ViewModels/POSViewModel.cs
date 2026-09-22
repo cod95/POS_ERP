@@ -151,7 +151,17 @@ namespace POS.ViewModels
             DeliveryCommand = new RelayCommand(ExecuteDelivery);
             SuspendBillCommand = new RelayCommand(ExecuteSuspendBillCommand);
             CancelBillCommand = new RelayCommand(ExecuteCancelBill);
-            #region CartListEvents
+            private POS.Domain.Models.Payments.PaymentType MapPaymentType(string paymentMethod)
+        {
+            return paymentMethod switch
+            {
+                "كارت" => POS.Domain.Models.Payments.PaymentType.CreditCard,
+                "على الحساب" => POS.Domain.Models.Payments.PaymentType.OnAccount,
+                _ => POS.Domain.Models.Payments.PaymentType.Cash
+            };
+        }
+
+        #region CartListEvents
             CartList_CurrentCellChangedCommand = new RelayCommand(ExecuteCartList_CurrentCellChangedCommand);
             CartList_SelectionChangedCommand = new RelayCommand(ExecuteCartList_SelectionChangedCommand);
             CartList_MouseDownCommand = new RelayCommand(ExecuteCartList_MouseDownCommand);
@@ -255,8 +265,12 @@ namespace POS.ViewModels
         {
             // Create and show the payment dialog
             PaymentDialog paymentDialog = new PaymentDialog();
-            paymentDialog.viewModel.Total = 100.ToString();
-            paymentDialog.viewModel.TotalQuantity = 100.ToString();
+            paymentDialog.viewModel.Total = TotalAmount.ToString("0.00");
+            paymentDialog.viewModel.TotalQuantity = TotalQuantity.ToString("0.###");
+            paymentDialog.viewModel.SubTotal = SubTotal.ToString("0.00");
+            paymentDialog.viewModel.TaxPercentage = Tax.ToString("0.##");
+            paymentDialog.viewModel.DiscountPercentage = Discount.ToString("0.##");
+            paymentDialog.viewModel.PaymentAmount = Convert.ToDecimal(TotalAmount);
             // Show the dialog as a modal window
             bool? result = paymentDialog.ShowDialog();
 
@@ -266,7 +280,7 @@ namespace POS.ViewModels
                 // Payment dialog was closed, handle the result
                 if (paymentDialog.viewModel.PaymentResult == true)
                 {
-                    AddInvoiceWithSaleProducts();
+                    AddInvoiceWithSaleProducts(paymentDialog.viewModel.SelectedPaymentMethod, paymentDialog.viewModel.PaymentAmount);
 
                 }
 
@@ -296,7 +310,7 @@ namespace POS.ViewModels
             Console.WriteLine("Cancel bill command executed");
         }
 
-        private void AddInvoiceWithSaleProducts()
+        private void AddInvoiceWithSaleProducts(string paymentMethod, decimal paymentAmount)
         {
             Invoice newInvoice = new Invoice
             {
@@ -320,17 +334,28 @@ namespace POS.ViewModels
                     ProductId = cartItem.ProductId,
                     Quantity = cartItem.Quantity,
                     SalePrice = cartItem.SalePrice,
+                    WarehouseId = SelectedWarehouse?.Id,
                     Warehouse = SelectedWarehouse,
+                    Date = PurchaseDate,
                     // Earned = cartItem.Earned,
                     Details = cartItem.Details
                 };
                 saleProduct.InvoiceId = newInvoice.Id;
                 _dbContext.SaleProducts.Add(saleProduct);
-                _dbContext.SaveChanges();
             }
 
             // Save changes to persist the SaleProduct entities associated with the Invoice
             //_dbContext.SaveChanges();
+
+            _dbContext.InvoicePayments.Add(new POS.Domain.Models.Payments.InvoicePayment
+            {
+                InvoiceId = newInvoice.Id,
+                Amount = paymentAmount,
+                Date = PaymentDate,
+                PaymentType = MapPaymentType(paymentMethod)
+            });
+
+            _dbContext.SaveChanges();
 
             // Clear the cart items list
             CartItemsList.Clear();
