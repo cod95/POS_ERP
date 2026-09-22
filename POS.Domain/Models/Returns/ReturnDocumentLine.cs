@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using POS.Domain.Models.Products;
 
 namespace POS.Domain.Models.Returns;
 
