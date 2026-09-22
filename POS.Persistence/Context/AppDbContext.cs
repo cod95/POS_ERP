@@ -52,7 +52,7 @@ namespace POS.Persistence.Context
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // Determine the path to your SQLite database file
-            string dbDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "database");
+            string dbDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "POS", "database");
 
             // Create directory if it doesn't exist
             if (!Directory.Exists(dbDirectory))
