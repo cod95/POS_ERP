@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
@@ -84,6 +85,13 @@ namespace POS
 
             // Build the service provider
             ServiceProvider = services.BuildServiceProvider();
+
+            // Apply pending EF Core migrations before the UI starts.
+            using (var scope = ServiceProvider.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                db.Database.Migrate();
+            }
             var loginView = new LoginView();
             // var loginView = new LoginView(_serviceProvider.GetService<SignInManager<ApplicationUser>>());
             loginView.Show();
