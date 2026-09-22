@@ -177,7 +177,7 @@ namespace POS.ViewModels
                 {
                     try
                     {
-                        string directoryPath = Path.Combine(Environment.CurrentDirectory, "images", "products");
+                        string directoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "POS", "images", "products");
                         ProductImageSource = Path.Combine(directoryPath, selectedProduct.ImagePath);
                         // ProductImageSource = selectedProduct.ImagePath;
                     }
@@ -1455,7 +1455,7 @@ namespace POS.ViewModels
             try
             {
                 uniqueFileName = $"{Guid.NewGuid()}.jpeg";
-                string directoryPath = Path.Combine(Environment.CurrentDirectory, "images", "products");
+                string directoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "POS", "images", "products");
                 string imagePath = Path.Combine(directoryPath, uniqueFileName);
 
                 // Create the directory if it does not exist
