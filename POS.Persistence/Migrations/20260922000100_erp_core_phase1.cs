@@ -20,6 +20,32 @@ namespace POS.Persistence.Migrations
             migrationBuilder.AddColumn<decimal>("ExchangeRate", "PurchasePayments", type: "decimal(18, 6)", nullable: false, defaultValue: 1m);
 
             migrationBuilder.CreateTable(
+                name: "CurrencyRates",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false).Annotation("Sqlite:Autoincrement", true),
+                    Currency = table.Column<int>(type: "INTEGER", nullable: false),
+                    Rate = table.Column<decimal>(type: "decimal(18, 6)", nullable: false),
+                    EffectiveDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Notes = table.Column<string>(type: "TEXT", nullable: true),
+                    CreatedBy = table.Column<string>(type: "TEXT", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "TEXT", nullable: true),
+                    ModifiedDate = table.Column<DateTime>(type: "TEXT", nullable: true)
+                },
+                constraints: table => table.PrimaryKey("PK_CurrencyRates", x => x.Id));
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CurrencyRates_Currency_EffectiveDate",
+                table: "CurrencyRates",
+                columns: new[] { "Currency", "EffectiveDate" });
+
+            migrationBuilder.InsertData(
+                table: "CurrencyRates",
+                columns: new[] { "Currency", "Rate", "EffectiveDate", "Notes" },
+                values: new object[] { 0, 1m, new DateTime(2026, 1, 1), "Base USD rate" });
+
+            migrationBuilder.CreateTable(
                 name: "StockMovements",
                 columns: table => new
                 {
@@ -70,6 +96,7 @@ namespace POS.Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable("StockMovements");
+            migrationBuilder.DropTable("CurrencyRates");
             migrationBuilder.DropColumn("CostPrice", "SaleProducts");
             migrationBuilder.DropColumn("Currency", "Invoices");
             migrationBuilder.DropColumn("ExchangeRate", "Invoices");
