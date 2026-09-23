@@ -112,6 +112,8 @@
         </Grid.RowDefinitions>
         <Border  FlowDirection="RightToLeft" Grid.Row="0" Margin="10" CornerRadius="15" Background="White" BorderThickness="2" BorderBrush="{StaticResource PrimaryBackgroundColor}">
             <StackPanel FlowDirection="RightToLeft">
+                <TextBlock Text="إدارة المستخدمين" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource PrimaryTextColor}" Margin="0,0,0,12"/>
+                <TextBlock Text="المستخدمون والصلاحيات الأساسية للنظام" FontSize="12" Foreground="Gray" Margin="0,0,0,10"/>
                 <!-- User Details Fields -->
                 <TextBlock Text="تفاصيل المستخدم" FontSize="16" FontWeight="Bold" Margin="0,10,0,5"/>
 

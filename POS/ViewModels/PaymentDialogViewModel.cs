@@ -19,9 +19,20 @@ namespace POS.ViewModels
         private ObservableCollection<string> _customerAccounts;
         private string _selectedCustomerAccount;
         private bool _isAccountPaymentMode;
+        private decimal _paymentAmount;
 
 
         private bool? _paymentResult;
+
+        public decimal PaymentAmount
+        {
+            get => _paymentAmount;
+            set
+            {
+                _paymentAmount = value;
+                OnPropertyChanged(nameof(PaymentAmount));
+            }
+        }
 
         public bool? PaymentResult
         {
@@ -149,6 +160,8 @@ namespace POS.ViewModels
                 "على الحساب"
             };
 
+            SelectedPaymentMethod = "نقدى";
+
             // Initialize other properties as needed
         }
 
@@ -159,6 +172,18 @@ namespace POS.ViewModels
 
         private void Proceed(object parameter)
         {
+            if (PaymentAmount <= 0)
+            {
+                MessageBox.Show("قيمة السداد يجب أن تكون أكبر من صفر.", "تنبيه", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(SelectedPaymentMethod))
+            {
+                MessageBox.Show("يرجى اختيار طريقة الدفع.", "تنبيه", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             PaymentResult = true;
             System.Windows.Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.IsActive)?.Close(); // Close the dialog
         }

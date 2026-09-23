@@ -31,7 +31,7 @@ namespace POS.Views
         // Method to navigate to MainWindow
         private void NavigateToMainWindow(bool parameter)
         {
-            var mainWindow = new HomeWindow();
+            var mainWindow = new MainWindow();
             mainWindow.Show();
             this.Close();
         }

@@ -112,7 +112,7 @@ namespace POS.ViewModels
             TotalQuantity = CartItemsList.Sum(item => item.Quantity);
             SubTotal = CartItemsList.Sum(item => item.SalePrice * item.Quantity);
             TotalAmount = SubTotal + ((Tax / 100) * SubTotal) - Discount;
-            // Earnings = (double)(TotalAmount - CartItemsList.Sum(item => item.Product.GetLastPurchasePrice() * item.Quantity));
+            Earnings = CartItemsList.Sum(item => (item.SalePrice - item.CostPrice) * item.Quantity);
         }
         public void SetSelectedItemValues(SaleProduct selectedCartItem)
         {
@@ -138,6 +138,16 @@ namespace POS.ViewModels
         public ICommand DeliveryCommand { get; }
         public ICommand SuspendBillCommand { get; }
         public ICommand CancelBillCommand { get; }
+        private POS.Domain.Models.Payments.PaymentType MapPaymentType(string paymentMethod)
+        {
+            return paymentMethod switch
+            {
+                "كارت" => POS.Domain.Models.Payments.PaymentType.CreditCard,
+                "على الحساب" => POS.Domain.Models.Payments.PaymentType.OnAccount,
+                _ => POS.Domain.Models.Payments.PaymentType.Cash
+            };
+        }
+
         public POSViewModel() : base()
         {
             BillNumber = GetNextInvoiceNumber(false);
@@ -151,7 +161,7 @@ namespace POS.ViewModels
             DeliveryCommand = new RelayCommand(ExecuteDelivery);
             SuspendBillCommand = new RelayCommand(ExecuteSuspendBillCommand);
             CancelBillCommand = new RelayCommand(ExecuteCancelBill);
-            #region CartListEvents
+        #region CartListEvents
             CartList_CurrentCellChangedCommand = new RelayCommand(ExecuteCartList_CurrentCellChangedCommand);
             CartList_SelectionChangedCommand = new RelayCommand(ExecuteCartList_SelectionChangedCommand);
             CartList_MouseDownCommand = new RelayCommand(ExecuteCartList_MouseDownCommand);
@@ -226,6 +236,7 @@ namespace POS.ViewModels
                         Product = SelectedProduct,
                         Quantity = Quantity,
                         SalePrice = SalePrice,
+                        CostPrice = Convert.ToDouble(SelectedProduct.GetLastPurchasePrice(SelectedWarehouse?.Id) ?? 0),
                         CreatedDate = DateTime.Now,
                         Warehouse = SelectedWarehouse,
                         //Earned = (double)(SalePrice - (SelectedProduct.GetLastPurchasePrice() * Quantity)),
@@ -255,8 +266,12 @@ namespace POS.ViewModels
         {
             // Create and show the payment dialog
             PaymentDialog paymentDialog = new PaymentDialog();
-            paymentDialog.viewModel.Total = 100.ToString();
-            paymentDialog.viewModel.TotalQuantity = 100.ToString();
+            paymentDialog.viewModel.Total = TotalAmount.ToString("0.00");
+            paymentDialog.viewModel.TotalQuantity = TotalQuantity.ToString("0.###");
+            paymentDialog.viewModel.SubTotal = SubTotal.ToString("0.00");
+            paymentDialog.viewModel.TaxPercentage = Tax.ToString("0.##");
+            paymentDialog.viewModel.DiscountPercentage = Discount.ToString("0.##");
+            paymentDialog.viewModel.PaymentAmount = Convert.ToDecimal(TotalAmount);
             // Show the dialog as a modal window
             bool? result = paymentDialog.ShowDialog();
 
@@ -266,7 +281,7 @@ namespace POS.ViewModels
                 // Payment dialog was closed, handle the result
                 if (paymentDialog.viewModel.PaymentResult == true)
                 {
-                    AddInvoiceWithSaleProducts();
+                    AddInvoiceWithSaleProducts(paymentDialog.viewModel.SelectedPaymentMethod, paymentDialog.viewModel.PaymentAmount);
 
                 }
 
@@ -296,7 +311,7 @@ namespace POS.ViewModels
             Console.WriteLine("Cancel bill command executed");
         }
 
-        private void AddInvoiceWithSaleProducts()
+        private void AddInvoiceWithSaleProducts(string paymentMethod, decimal paymentAmount)
         {
             Invoice newInvoice = new Invoice
             {
@@ -320,17 +335,42 @@ namespace POS.ViewModels
                     ProductId = cartItem.ProductId,
                     Quantity = cartItem.Quantity,
                     SalePrice = cartItem.SalePrice,
+                    CostPrice = cartItem.CostPrice,
+                    WarehouseId = SelectedWarehouse?.Id,
                     Warehouse = SelectedWarehouse,
+                    Date = PurchaseDate,
                     // Earned = cartItem.Earned,
                     Details = cartItem.Details
                 };
                 saleProduct.InvoiceId = newInvoice.Id;
                 _dbContext.SaleProducts.Add(saleProduct);
-                _dbContext.SaveChanges();
+                _dbContext.StockMovements.Add(new POS.Domain.Models.StockMovement
+                {
+                    ProductId = cartItem.ProductId.Value,
+                    WarehouseId = SelectedWarehouse?.Id,
+                    Quantity = -cartItem.Quantity,
+                    UnitCost = cartItem.CostPrice,
+                    MovementType = POS.Domain.Models.StockMovementType.Sale,
+                    Date = PurchaseDate,
+                    InvoiceId = newInvoice.Id,
+                    Reference = newInvoice.Number
+                });
             }
 
             // Save changes to persist the SaleProduct entities associated with the Invoice
             //_dbContext.SaveChanges();
+
+            _dbContext.InvoicePayments.Add(new POS.Domain.Models.Payments.InvoicePayment
+            {
+                InvoiceId = newInvoice.Id,
+                Amount = paymentAmount,
+                Date = PaymentDate,
+                PaymentType = MapPaymentType(paymentMethod),
+                Currency = newInvoice.Currency,
+                ExchangeRate = newInvoice.ExchangeRate
+            });
+
+            _dbContext.SaveChanges();
 
             // Clear the cart items list
             CartItemsList.Clear();

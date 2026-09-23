@@ -782,6 +782,8 @@ namespace POS.ViewModels.Base
                    .ThenInclude(p => p.SaleProducts)
                .Include(c => c.Products)
                    .ThenInclude(p => p.PurchaseProducts)
+               .Include(c => c.Products)
+                   .ThenInclude(p => p.StockMovements)
                .Select(c => new
                {
                    Category = c,
@@ -803,7 +805,7 @@ namespace POS.ViewModels.Base
                 // Add products of the category to the ProductList
                 foreach (var product in item.Products)
                 {
-                    product.Product.ImagePath = Path.Combine(Environment.CurrentDirectory, "images", "products", product.Product.ImagePath);
+                    product.Product.ImagePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "POS", "images", "products", product.Product.ImagePath);
                     ProductList.Add(product.Product);
                 }
             }

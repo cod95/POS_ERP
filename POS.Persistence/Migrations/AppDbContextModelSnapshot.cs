@@ -307,6 +307,41 @@ namespace POS.Persistence.Migrations
                     b.ToTable("CompanyInfo");
                 });
 
+            modelBuilder.Entity("POS.Domain.Models.CurrencyRate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Currency")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("EffectiveDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Rate")
+                        .HasColumnType("decimal(18, 6)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CurrencyRates");
+                });
+
             modelBuilder.Entity("POS.Domain.Models.Customer", b =>
                 {
                     b.Property<int>("Id")
@@ -362,8 +397,8 @@ namespace POS.Persistence.Migrations
                     b.Property<string>("PostalCode")
                         .HasColumnType("TEXT");
 
-                    b.Property<double>("PreviousBalance")
-                        .HasColumnType("REAL");
+                    b.Property<decimal>("PreviousBalance")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("TaxCard")
                         .HasColumnType("TEXT");
@@ -391,6 +426,9 @@ namespace POS.Persistence.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("Currency")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int?>("CustomerId")
                         .HasColumnType("INTEGER");
 
@@ -402,6 +440,9 @@ namespace POS.Persistence.Migrations
 
                     b.Property<DateTime?>("DueDate")
                         .HasColumnType("TEXT");
+
+                    b.Property<decimal>("ExchangeRate")
+                        .HasColumnType("decimal(18, 6)");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("TEXT");
@@ -474,8 +515,14 @@ namespace POS.Persistence.Migrations
                     b.Property<int?>("CreditCardId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("Currency")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("TEXT");
+
+                    b.Property<decimal>("ExchangeRate")
+                        .HasColumnType("decimal(18, 6)");
 
                     b.Property<int>("InvoiceId")
                         .HasColumnType("INTEGER");
@@ -690,8 +737,14 @@ namespace POS.Persistence.Migrations
                     b.Property<int?>("CreditCardId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("Currency")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("TEXT");
+
+                    b.Property<decimal>("ExchangeRate")
+                        .HasColumnType("decimal(18, 6)");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("TEXT");
@@ -1016,6 +1069,9 @@ namespace POS.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<double>("CostPrice")
+                        .HasColumnType("REAL");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("TEXT");
 
@@ -1077,6 +1133,9 @@ namespace POS.Persistence.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("Currency")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("TEXT");
 
@@ -1085,6 +1144,9 @@ namespace POS.Persistence.Migrations
 
                     b.Property<DateTime?>("DueDate")
                         .HasColumnType("TEXT");
+
+                    b.Property<decimal>("ExchangeRate")
+                        .HasColumnType("decimal(18, 6)");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("TEXT");
@@ -1128,6 +1190,139 @@ namespace POS.Persistence.Migrations
                     b.ToTable("Purchases");
                 });
 
+            modelBuilder.Entity("POS.Domain.Models.Returns.ReturnDocument", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Currency")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("CustomerId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("ExchangeRate")
+                        .HasColumnType("decimal(18, 6)");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Number")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Reason")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("SourceInvoiceId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("SourcePurchaseId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Subtotal")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<int?>("SupplierId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("WarehouseId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("SourceInvoiceId");
+
+                    b.HasIndex("SourcePurchaseId");
+
+                    b.HasIndex("SupplierId");
+
+                    b.HasIndex("WarehouseId");
+
+                    b.ToTable("ReturnDocuments");
+                });
+
+            modelBuilder.Entity("POS.Domain.Models.Returns.ReturnDocumentLine", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("LineTotal")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("Quantity")
+                        .HasColumnType("REAL");
+
+                    b.Property<int>("ReturnDocumentId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("SourcePurchaseProductId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("SourceSaleProductId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("UnitCost")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<int?>("WarehouseId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("ReturnDocumentId");
+
+                    b.HasIndex("SourcePurchaseProductId");
+
+                    b.HasIndex("SourceSaleProductId");
+
+                    b.HasIndex("WarehouseId");
+
+                    b.ToTable("ReturnDocumentLines");
+                });
+
             modelBuilder.Entity("POS.Domain.Models.Shipping", b =>
                 {
                     b.Property<int>("Id")
@@ -1155,6 +1350,67 @@ namespace POS.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Shippings");
+                });
+
+            modelBuilder.Entity("POS.Domain.Models.StockMovement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("InvoiceId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("MovementType")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("PurchaseId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("Quantity")
+                        .HasColumnType("REAL");
+
+                    b.Property<string>("Reference")
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("UnitCost")
+                        .HasColumnType("REAL");
+
+                    b.Property<int?>("WarehouseId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InvoiceId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("PurchaseId");
+
+                    b.HasIndex("WarehouseId");
+
+                    b.ToTable("StockMovements");
                 });
 
             modelBuilder.Entity("POS.Domain.Models.Supplier", b =>
@@ -1212,8 +1468,8 @@ namespace POS.Persistence.Migrations
                     b.Property<string>("PostalCode")
                         .HasColumnType("TEXT");
 
-                    b.Property<double>("PreviousBalance")
-                        .HasColumnType("REAL");
+                    b.Property<decimal>("PreviousBalance")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("TaxCard")
                         .HasColumnType("TEXT");
@@ -1341,7 +1597,7 @@ namespace POS.Persistence.Migrations
                         {
                             Id = "8e445865-a24d-4543-a6c6-9443d048cdb9",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "dcd6024f-fe95-472a-982d-e06071df2996",
+                            ConcurrencyStamp = "d23696d8-53f3-4ffe-b4d6-c601d36fe965",
                             DefaultRole = "Administrator",
                             Email = "admin@arp.com",
                             EmailConfirmed = true,
@@ -1350,9 +1606,9 @@ namespace POS.Persistence.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ARP.COM",
                             NormalizedUserName = "ADMIN@ARP.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEHsFBoYC1OjlTy3EMnR9xiQB+TrnU9HeuoZ31GQQZTW2KBUOnP/jk8KfVJJNbL/VhA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAENig7JwRW6RIsESOAPqG4Wiivi/0QLtM+wTC15lDx6aR7HbE2MvQSXT+RItzX96YzA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "db70b73d-d4bd-4de1-95e5-bae2a3f3ab3c",
+                            SecurityStamp = "71119aa9-e521-4243-aac2-52e2de3bce6a",
                             TwoFactorEnabled = false,
                             UserName = "admin@arp.com"
                         },
@@ -1360,7 +1616,7 @@ namespace POS.Persistence.Migrations
                         {
                             Id = "9e224968-33e4-4652-b7b7-8574d048cdb9",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3d5e8096-5f8a-4799-a39d-2c7cd7a0dc7d",
+                            ConcurrencyStamp = "f30480a2-4363-451a-9501-d15ceb8d6eb6",
                             Email = "user@arp.com",
                             EmailConfirmed = true,
                             FirstName = "System",
@@ -1368,9 +1624,9 @@ namespace POS.Persistence.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "USER@ARP.COM",
                             NormalizedUserName = "USER@ARP.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEEjM5C7W9iWZ64QESgYCGDT/n8dUlCyZX6476LyDEcz2ZOsmo0xqcT6CEercmKzzcg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEPY1kNx5Rfgcp/El7XrosAgLCUtP8zENXnxBbu+UlvTYxbu0IUn7cKAZZFyTncSw6A==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "ed2b70b6-0f12-459e-862e-f4a8793037ac",
+                            SecurityStamp = "4aa2a596-8c93-4335-b5a3-d21d0c8de18e",
                             TwoFactorEnabled = false,
                             UserName = "user@arp.com"
                         });
@@ -1758,6 +2014,116 @@ namespace POS.Persistence.Migrations
                     b.Navigation("Warehouse");
                 });
 
+            modelBuilder.Entity("POS.Domain.Models.Returns.ReturnDocument", b =>
+                {
+                    b.HasOne("POS.Domain.Models.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("POS.Domain.Models.Invoice", "SourceInvoice")
+                        .WithMany()
+                        .HasForeignKey("SourceInvoiceId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("POS.Domain.Models.Purchase", "SourcePurchase")
+                        .WithMany()
+                        .HasForeignKey("SourcePurchaseId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("POS.Domain.Models.Supplier", "Supplier")
+                        .WithMany()
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("POS.Domain.Models.Warehouse", "Warehouse")
+                        .WithMany()
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("SourceInvoice");
+
+                    b.Navigation("SourcePurchase");
+
+                    b.Navigation("Supplier");
+
+                    b.Navigation("Warehouse");
+                });
+
+            modelBuilder.Entity("POS.Domain.Models.Returns.ReturnDocumentLine", b =>
+                {
+                    b.HasOne("POS.Domain.Models.Products.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("POS.Domain.Models.Returns.ReturnDocument", "ReturnDocument")
+                        .WithMany("Lines")
+                        .HasForeignKey("ReturnDocumentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("POS.Domain.Models.Products.PurchaseProduct", "SourcePurchaseProduct")
+                        .WithMany()
+                        .HasForeignKey("SourcePurchaseProductId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("POS.Domain.Models.Products.SaleProduct", "SourceSaleProduct")
+                        .WithMany()
+                        .HasForeignKey("SourceSaleProductId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("POS.Domain.Models.Warehouse", "Warehouse")
+                        .WithMany()
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Product");
+
+                    b.Navigation("ReturnDocument");
+
+                    b.Navigation("SourcePurchaseProduct");
+
+                    b.Navigation("SourceSaleProduct");
+
+                    b.Navigation("Warehouse");
+                });
+
+            modelBuilder.Entity("POS.Domain.Models.StockMovement", b =>
+                {
+                    b.HasOne("POS.Domain.Models.Invoice", "Invoice")
+                        .WithMany()
+                        .HasForeignKey("InvoiceId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("POS.Domain.Models.Products.Product", "Product")
+                        .WithMany("StockMovements")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("POS.Domain.Models.Purchase", "Purchase")
+                        .WithMany()
+                        .HasForeignKey("PurchaseId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("POS.Domain.Models.Warehouse", "Warehouse")
+                        .WithMany()
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Invoice");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Purchase");
+
+                    b.Navigation("Warehouse");
+                });
+
             modelBuilder.Entity("POS.Persistence.Models.Expenses", b =>
                 {
                     b.HasOne("POS.Persistence.Models.ApplicationUser", "Employee")
@@ -1820,6 +2186,8 @@ namespace POS.Persistence.Migrations
                     b.Navigation("ReadyProducts");
 
                     b.Navigation("SaleProducts");
+
+                    b.Navigation("StockMovements");
                 });
 
             modelBuilder.Entity("POS.Domain.Models.Products.ReadyProduct", b =>
@@ -1834,6 +2202,11 @@ namespace POS.Persistence.Migrations
                     b.Navigation("PurchasePayments");
 
                     b.Navigation("PurchaseProducts");
+                });
+
+            modelBuilder.Entity("POS.Domain.Models.Returns.ReturnDocument", b =>
+                {
+                    b.Navigation("Lines");
                 });
 
             modelBuilder.Entity("POS.Domain.Models.Shipping", b =>

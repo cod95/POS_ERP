@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using POS.Domain.Models;
 
 namespace POS.Domain.Models.Products
 {
@@ -272,25 +273,23 @@ namespace POS.Domain.Models.Products
 
         // One-to-many relationship with PurchaseProduct
         public ICollection<PurchaseProduct>? PurchaseProducts { get; set; }
+        public ICollection<StockMovement>? StockMovements { get; set; }
 
         public ProductType ProductType { get; set; }
-        // Calculated quantity based on sales and purchases
+        // Current stock is calculated from the immutable stock movement ledger.
         public double Quantity(int? warehouseId = null)
         {
             if (ProductType == ProductType.Service)
                 return 0;
 
-            // Filter purchase and sale quantities based on the warehouse if provided
-            var purchaseQuantity = PurchaseProducts
-                .Where(p => warehouseId == null || p.WarehouseId == warehouseId)
-                .Sum(p => p.Quantity);
+            if (StockMovements == null)
+                return 0;
 
-            var saleQuantity = SaleProducts
-                .Where(s => warehouseId == null || s.WarehouseId == warehouseId)
-                .Sum(s => s.Quantity);
-
-            return purchaseQuantity - saleQuantity;
+            return StockMovements
+                .Where(m => warehouseId == null || m.WarehouseId == warehouseId)
+                .Sum(m => m.Quantity);
         }
+
         private double? _minSalePrice;
         public double? MinSalePrice
         {
@@ -331,19 +330,22 @@ namespace POS.Domain.Models.Products
                 }
             }
         }
-        public double? GetLastPurchasePrice()
+        public double? GetLastPurchasePrice(int? warehouseId = null)
         {
-            // Ensure PurchaseProducts is not null
             if (PurchaseProducts != null && PurchaseProducts.Any())
             {
-                // Sort purchase products by purchase date descending
-                var sortedPurchases = PurchaseProducts.OrderByDescending(p => p.Purchase?.Date);
+                var query = PurchaseProducts.AsEnumerable();
 
-                // Return the purchase price of the first purchase (latest date)
-                return sortedPurchases.FirstOrDefault()?.PurchasePrice;
+                if (warehouseId.HasValue)
+                    query = query.Where(p => p.WarehouseId == warehouseId.Value);
+
+                return query
+                    .OrderByDescending(p => p.Purchase?.Date ?? p.Date)
+                    .ThenByDescending(p => p.Id)
+                    .Select(p => (double?)p.PurchasePrice)
+                    .FirstOrDefault() ?? 0;
             }
 
-            // If PurchaseProducts is null or empty, return null
             return 0;
         }
 

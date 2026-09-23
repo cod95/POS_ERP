@@ -101,6 +101,20 @@ namespace POS.Domain.Models.Products
         //        }
         //    }
         //}
+        private double _costPrice;
+        public double CostPrice
+        {
+            get => _costPrice;
+            set
+            {
+                if (_costPrice != value)
+                {
+                    _costPrice = value;
+                    NotifyPropertyChanged(nameof(CostPrice));
+                }
+            }
+        }
+
         private string? _details;
         public string? Details
         {

@@ -4,6 +4,7 @@ using POS.Domain.Models;
 using POS.Domain.Models.Payments;
 using POS.Domain.Models.Payments.PaymentMethods;
 using POS.Domain.Models.Products;
+using POS.Domain.Models.Returns;
 using POS.Persistence.Configurations;
 using POS.Persistence.Models;
 
@@ -36,6 +37,10 @@ namespace POS.Persistence.Context
         public DbSet<Purchase> Purchases { get; set; }
         public DbSet<PurchasePayment> PurchasePayments { get; set; }
         public DbSet<PurchaseProduct> PurchaseProducts { get; set; }
+        public DbSet<StockMovement> StockMovements { get; set; }
+        public DbSet<CurrencyRate> CurrencyRates { get; set; }
+        public DbSet<ReturnDocument> ReturnDocuments { get; set; }
+        public DbSet<ReturnDocumentLine> ReturnDocumentLines { get; set; }
 
         public DbSet<Area> Areas { get; set; }
         public DbSet<Shipping> Shippings { get; set; }
@@ -52,12 +57,23 @@ namespace POS.Persistence.Context
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // Determine the path to your SQLite database file
-            string dbDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "database");
+            string dbDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "POS", "database");
 
             // Create directory if it doesn't exist
             if (!Directory.Exists(dbDirectory))
             {
                 Directory.CreateDirectory(dbDirectory);
+            }
+
+            // Preserve an existing installation database when upgrading from the old
+            // application-directory location to the user-writable LocalAppData location.
+            string legacyDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "database");
+            string legacyDatabase = Path.Combine(legacyDirectory, "pos.db");
+            string currentDatabase = Path.Combine(dbDirectory, "pos.db");
+
+            if (!File.Exists(currentDatabase) && File.Exists(legacyDatabase))
+            {
+                File.Copy(legacyDatabase, currentDatabase, false);
             }
 
             // Set up the SQLite connection
@@ -79,11 +95,16 @@ namespace POS.Persistence.Context
             }
             base.OnModelCreating(modelBuilder);
         }
-        public virtual async Task<int> SaveChangesAsync()
+        public override int SaveChanges()
         {
             OnBeforeSaveChanges();
-            var result = await base.SaveChangesAsync();
-            return result;
+            return base.SaveChanges();
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            OnBeforeSaveChanges();
+            return base.SaveChangesAsync(cancellationToken);
         }
 
         private void OnBeforeSaveChanges()
